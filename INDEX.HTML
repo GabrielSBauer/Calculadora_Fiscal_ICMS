@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Fiscal ICMS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="input-section">
+        <h2>Dados da Ocorrência</h2>
+        <form id="billingForm">
+            <div class="form-group">
+                <label>Selecione o Motivo</label>
+                <select id="motivo">
+                    <option value="CARGA RECUSADA CIF - SEM VÍNCULO CTE">CARGA RECUSADA CIF - SEM VÍNCULO CTE</option>
+                    <option value="CARGA RECUSADA FOB/DIFERIDA - SEM VÍNCULO CTE">CARGA RECUSADA FOB/DIFERIDA - SEM VÍNCULO CTE</option>
+                    <option value="CARGA RECUSADA FOB/FIM ESP. EXP- SEM RETORNO ORIGEM">CARGA RECUSADA FOB/FIM ESP. EXP- SEM RETORNO ORIGEM</option>
+                    <option value="CARGA RECUSADA FOB/FIM ESP. EXP- SEM VÍNCULO CTE">CARGA RECUSADA FOB/FIM ESP. EXP- SEM VÍNCULO CTE</option>
+                    <option value="NOTA EMITIDA EM DUPLICIDADE">NOTA EMITIDA EM DUPLICIDADE</option>
+                    <option value="NOTA EMITIDA ERRONEAMENTE">NOTA EMITIDA ERRONEAMENTE</option>
+                    <option value="NOTA SEM BAIXA NO SEFAZ">NOTA SEM BAIXA NO SEFAZ</option>
+                    <option value="PERDA DO PRAZO EXPORTAÇÃO">PERDA DO PRAZO EXPORTAÇÃO</option>
+                    <option value="PERDA DO PRAZO EXPORTAÇÃO - COMPLEMENTO">PERDA DO PRAZO EXPORTAÇÃO - COMPLEMENTO</option>
+                    <option value="PERDA DO PRAZO EXPORTAÇÃO - SALDO NÃO DEU SAÍDA DO TRANSBORDO">PERDA DO PRAZO EXPORTAÇÃO - SALDO NÃO DEU SAÍDA DO TRANSBORDO</option>
+                    <option value="PERDA DO PRAZO EXPORTAÇÃO - SALDO PARCIAL">PERDA DO PRAZO EXPORTAÇÃO - SALDO PARCIAL</option>
+                    <option value="QUEBRA AJUSTE DE KARDEX">QUEBRA AJUSTE DE KARDEX</option>
+                    <option value="QUEBRA DE CUTT OFF - FOB">QUEBRA DE CUTT OFF - FOB</option>
+                    <option value="QUEBRA DE TRANSPORTE">QUEBRA DE TRANSPORTE</option>
+                    <option value="QUEBRA MOVIMENTAÇÃO TERMINAL">QUEBRA MOVIMENTAÇÃO TERMINAL</option>
+                    <option value="QUEBRA MOVIMENTAÇÃO TRANSBORDO">QUEBRA MOVIMENTAÇÃO TRANSBORDO</option>
+                    <option value="QUEBRA SINISTRO RODO">QUEBRA SINISTRO RODO</option>
+                    <option value="QUEBRA SINISTRO VAGÃO">QUEBRA SINISTRO VAGÃO</option>
+                    <option value="REEMBOLSO - MERCADORIA RECOLHIDA POR FORNECEDOR">REEMBOLSO - MERCADORIA RECOLHIDA POR FORNECEDOR</option>
+                    <option value="VENDA NO MERCADO INTERNO">VENDA NO MERCADO INTERNO</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="produto">
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="ALGODÃO">ALGODÃO</option>
+                    <option value="SOJA EM GRAOS">SOJA EM GRAOS</option>
+                    <option value="MILHO EM GRAO">MILHO EM GRAO</option>
+                    <option value="FARELO DE SOJA HIPRO 101004">FARELO DE SOJA HIPRO 101004</option>
+                    <option value="FARELO DE SOJA TPII46%PROT GRAN">FARELO DE SOJA TPII46%PROT GRAN</option>
+                    <option value="GLICERINA">GLICERINA</option>
+                    <option value="TRIGO EM GRAOS PN">TRIGO EM GRAOS PN</option>
+                    <option value="TRIGO RAÇÃO">TRIGO RAÇÃO</option>
+                    <option value="107001 OLEO SOJA DEGOMADO G">107001 OLEO SOJA DEGOMADO G</option>
+                    <option value="107046 - OLEO SOJA RF CORCOVADO">107046 - OLEO SOJA RF CORCOVADO</option>
+                </select>
+            </div>
+
+            <div class="row form-group">
+                <div class="col">
+                    <label>UF Origem</label>
+                    <select id="ufOrigem" onchange="calcularAutomatico()"></select>
+                </div>
+                <div class="col">
+                    <label>UF Destino</label>
+                    <select id="ufDestino" onchange="calcularAutomatico()"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Alíquota ICMS Tabela (%)</label>
+                <div class="row" style="gap:5px;">
+                    <input type="text" id="aliquotaDisplay" readonly placeholder="-" style="width: 80px; text-align: center;">
+                    <span style="font-size: 11px; color: #777; align-self: center;">Alíquota aplicada</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Valor Total da Nota (R$)</label>
+                <input type="text" id="valorNf" class="mascara-numero" placeholder="0,00" oninput="formatarMoeda(this); calcularAutomatico()">
+            </div>
+
+            <div class="row form-group">
+                <div class="col">
+                    <label>Peso Nota (kg)</label>
+                    <input type="text" id="pesoNf" class="mascara-numero" placeholder="0,00" oninput="formatarMoeda(this); calcularAutomatico()">
+                </div>
+                <div class="col">
+                    <label>Peso Pendente (kg)</label>
+                    <input type="text" id="pesoPendente" class="mascara-numero" placeholder="0,00" oninput="formatarMoeda(this); calcularAutomatico()">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label style="color:var(--accent);">Valor ICMS a Recolher (Total)</label>
+                <input type="text" id="valorCobranca" class="mascara-numero" placeholder="0,00" readonly style="font-size: 1.2em; color: var(--accent); font-weight: bold;">
+                <div id="debugCalc" style="font-size: 11px; color: #555; margin-top: 5px; font-family: monospace;"></div>
+            </div>
+
+            <button type="button" class="btn-generate" onclick="gerarEmail()">Gerar E-mail Fiscal</button>
+        </form>
+    </div>
+
+    <div class="preview-section">
+        <h2>Pré-visualização</h2>
+        <div id="emailPreview">
+            <p style="color:#999; text-align:center; margin-top:50px;">
+                Preencha os dados e o sistema calculará o ICMS.
+            </p>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-copy" onclick="abrirOutlook()">
+                Copiar e Abrir Outlook
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+:root {
+    /* Paleta Oficial */
+    --navy: #012169;
+    --tonal-navy: #00109E;
+    --chlorophyll: #8BC400;
+    --husk: #00AD50;
+    --gray: #6D6E71;
+    --white: #FFFFFF;
+    
+    /* Mapeamento para o sistema */
+    --primary: var(--navy);       /* Cor principal dos títulos */
+    --accent: var(--husk);        /* Cor do botão e destaques */
+    --readonly-bg: #f4f6f8;       /* Fundo cinza bem claro */
+}
+
+/* Reset básico */
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    min-height: 100vh;
+    justify-content: center; 
+    color: var(--gray);
+}
+
+.input-section {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 500px;
+    overflow-y: auto;
+    max-height: 95vh;
+    border-top: 5px solid var(--navy); /* Detalhe da marca no topo */
+}
+
+h2 { 
+    color: var(--navy); 
+    border-bottom: 2px solid var(--chlorophyll); 
+    padding-bottom: 10px; 
+    font-size: 1.2rem; 
+    margin-top: 0; 
+}
+
+.form-group { margin-bottom: 15px; }
+
+label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: 700; 
+    font-size: 0.85em; 
+    color: var(--navy); 
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    color: var(--gray);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--navy);
+}
+
+/* Campos somente leitura */
+input[readonly] {
+    background-color: var(--readonly-bg);
+    color: var(--navy);
+    font-weight: bold;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+input.mascara-numero { text-align: right; }
+
+.row { display: flex; gap: 10px; }
+.col { flex: 1; }
+
+/* Botão Principal (Verde Husk) */
+button.btn-generate {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--husk);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+button.btn-generate:hover { background-color: var(--chlorophyll); }
+
+/* Área de Preview */
+.preview-section {
+    flex: 2;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 95vh;
+    border-top: 5px solid var(--navy);
+}
+
+#emailPreview {
+    border: 1px dashed #ccc;
+    padding: 30px;
+    flex-grow: 1;
+    background: #fff;
+    overflow-y: auto;
+}
+
+.actions { margin-top: 15px; }
+
+.btn-copy { 
+    width: 100%;
+    padding: 12px;
+    background-color: var(--navy); 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-copy:hover { background-color: var(--tonal-navy); }
+
+/* Responsividade */
+@media (max-width: 900px) {
+    body { flex-direction: column; padding: 10px; }
+    .input-section, .preview-section { max-width: 100%; width: 100%; max-height: none; overflow-y: visible; }
+    #emailPreview { min-height: 300px; }
+}
+
+@media (max-width: 480px) {
+    .row { flex-direction: column; gap: 15px; }
+    .input-section, .preview-section { padding: 15px; }
+}
