@@ -6,17 +6,28 @@ function gerarVisual() {
     const secaoVisual = document.getElementById('secao-visual');
     const containerVisual = document.getElementById('visual-nota');
 
+        // Função auxiliar para converter YYYY-MM-DD para DD/MM/YYYY
+    const formatarDataBR = (data) => {
+        if (!data || data === '-') return '-';
+        const partes = data.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return data; // Se já vier diferente, mantém como está
+    };
+
+
     // Capturar dados do formulário
     const filial = document.getElementById('filial').value || 'Não informado';
     const razaoSocial = document.getElementById('razao-social').value || 'Não informado';
     const cnpj = document.getElementById('cnpj').value || 'Não informado';
     const produto = document.getElementById('produto').value || 'Não selecionado';
     const nfLote = document.getElementById('nf-lote').value || '-';
-    const dataNfLote = document.getElementById('data-nf-lote').value || '-';
-    const cte = document.getElementById('cte').value || '-';
-    const dataCte = document.getElementById('data-cte').value || '-';
-    const nfVenda = document.getElementById('nf-venda').value || '-';
-    const dataNfVenda = document.getElementById('data-nf-venda').value || '-';
+    const dataNfLote     = formatarDataBR(document.getElementById('data-nf-lote').value);
+    const cte            = document.getElementById('cte').value            || '-';
+    const dataCte        = formatarDataBR(document.getElementById('data-cte').value);
+    const nfVenda        = document.getElementById('nf-venda').value       || '-';
+    const dataNfVenda    = formatarDataBR(document.getElementById('data-nf-venda').value);
     const pesoSaida = document.getElementById('peso-saida').value || '0';
     const pesoDestino = document.getElementById('peso-destino').value || '0';
     const pesoSinistrado = document.getElementById('peso-sinistrado').value || '0';
@@ -238,16 +249,27 @@ function gerarVisual() {
 function _gerarHTMLA4() {
     const dados = window.dadosCalculo || {};
 
-    const filial         = document.getElementById('filial').value           || 'Não informado';
-    const razaoSocial    = document.getElementById('razao-social').value     || 'Não informado';
-    const cnpj           = document.getElementById('cnpj').value             || 'Não informado';
-    const produto        = document.getElementById('produto').value          || 'Não selecionado';
-    const nfLote         = document.getElementById('nf-lote').value          || '-';
-    const dataNfLote     = document.getElementById('data-nf-lote').value     || '-';
-    const cte            = document.getElementById('cte').value              || '-';
-    const dataCte        = document.getElementById('data-cte').value         || '-';
-    const nfVenda        = document.getElementById('nf-venda').value         || '-';
-    const dataNfVenda    = document.getElementById('data-nf-venda').value    || '-';
+    // Função auxiliar para converter YYYY-MM-DD para DD/MM/YYYY
+    const formatarDataBR = (data) => {
+        if (!data || data === '-') return '-';
+        const partes = data.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return data; // Se já vier diferente, mantém como está
+    };
+
+    const filial         = document.getElementById('filial').value         || 'Não informado';
+    const razaoSocial    = document.getElementById('razao-social').value   || 'Não informado';
+    const cnpj           = document.getElementById('cnpj').value           || 'Não informado';
+    const produto        = document.getElementById('produto').value        || 'Não selecionado';
+    const nfLote         = document.getElementById('nf-lote').value        || '-';
+    // Aplicando a formatação nas datas:
+    const dataNfLote     = formatarDataBR(document.getElementById('data-nf-lote').value);
+    const cte            = document.getElementById('cte').value            || '-';
+    const dataCte        = formatarDataBR(document.getElementById('data-cte').value);
+    const nfVenda        = document.getElementById('nf-venda').value       || '-';
+    const dataNfVenda    = formatarDataBR(document.getElementById('data-nf-venda').value);
     const pesoSaida      = document.getElementById('peso-saida').value       || '0';
     const pesoDestino    = document.getElementById('peso-destino').value     || '0';
     const pesoSinistrado = document.getElementById('peso-sinistrado').value  || '0';
