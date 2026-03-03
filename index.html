@@ -29,30 +29,39 @@
     <section id="formulario" class="section">
         
         <!-- SEÇÃO 1: TRANSPORTADOR -->
-        <div class="card card-primary">
-            <div class="card-header">
-                <span class="card-icon">🚚</span>
-                <h2>Informações do Transportador</h2>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="filial">Filial ADM:</label>
-                        <input type="number" id="filial" placeholder="Ex: 1202">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="razao-social">Razão Social:</label>
-                        <input type="text" id="razao-social" placeholder="Nome da empresa">
-                    </div>
-                    <div class="form-group">
-                        <label for="cnpj">CNPJ:</label>
-                        <input type="text" id="cnpj" placeholder="00.000.000/0000-00" data-mascara="cnpj">
-                    </div>
-                </div>
+<div class="card card-primary">
+    <div class="card-header">
+        <span class="card-icon">🏢</span>
+        <h2>Filial da ADM</h2>
+    </div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="filial">Filial ADM:</label>
+                <input type="number" id="filial" placeholder="Ex: 1202">
             </div>
         </div>
+    </div>
+</div>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <span class="card-icon">🚚</span>
+        <h2>Informações do Transportador</h2>
+    </div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="razao-social">Razão Social:</label>
+                <input type="text" id="razao-social" placeholder="Nome da empresa">
+            </div>
+            <div class="form-group">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" placeholder="00.000.000/0000-00" data-mascara="cnpj">
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- SEÇÃO 2: PRODUTO E DOCUMENTOS -->
         <div class="card card-info">
@@ -377,7 +386,7 @@
                 </div>
                 <div class="faq-item">
                     <h3>O que é Gross-Up?</h3>
-                    <p>Ajuste para recuperar impostos pagos na NF original. Em MT, não se aplica.</p>
+                    <p>O termo “Gross Up”, traduzido significa “embutir os impostos” nada mais é doque "calculo por dentro". Em MT, não se aplica.</p>
                 </div>
                 <div class="faq-item">
                     <h3>Posso gerar PDF?</h3>
