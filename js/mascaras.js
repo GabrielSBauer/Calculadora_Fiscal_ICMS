@@ -2,181 +2,132 @@
 // MÁSCARAS E VALIDAÇÕES DE INPUT
 // =====================================================
 
-// Máscara para CNPJ: XX.XXX.XXX/XXXX-XX
-function mascaraCNPJ(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length > 14) value = value.slice(0, 14);
-    
-    if (value.length > 0) {
-        value = value.replace(/(\d{2})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1/$2');
-        value = value.replace(/(\d{4})(\d)/, '$1-$2');
-    }
-    input.value = value;
+// ── MOEDA BR: dinâmica com pontos e vírgula ──────────
+// Digita 1 → 0,01 | 1000 → 10,00 | 100000 → 1.000,00
+// O valor numérico real fica em input.dataset.raw (ex: "1234.56")
+function mascaraMoedaBR(input) {
+    let digits = input.value.replace(/\D/g, '');
+    if (digits.length > 13) digits = digits.slice(-13);
+    while (digits.length < 3) digits = '0' + digits;
+
+    const decPart = digits.slice(-2);
+    let intPart   = digits.slice(0, digits.length - 2).replace(/^0+/, '') || '0';
+
+    // Adiciona pontos de milhar
+    intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    input.value = intPart + ',' + decPart;
+
+    // Salva valor numérico puro para os cálculos
+    input.dataset.raw = parseFloat(intPart.replace(/\./g, '') + '.' + decPart) || 0;
 }
 
-// Máscara que detecta CPF ou CNPJ conforme o tamanho
-function mascaraCpfCnpj(input) {
-    let value = input.value.replace(/\D/g, '');
-    // limita a 14 dígitos (máximo CNPJ)
-    if (value.length > 14) value = value.slice(0, 14);
-
-    if (value.length <= 11) {
-        // CPF
-        if (value.length > 0) {
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1-$2');
-        }
-    } else {
-        // CNPJ
-        value = value.replace(/(\d{2})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1/$2');
-        value = value.replace(/(\d{4})(\d)/, '$1-$2');
-    }
-    input.value = value;
-}
-
-// Máscara para CPF: XXX.XXX.XXX-XX
-function mascaraCPF(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length > 11) value = value.slice(0, 11);
-    
-    if (value.length > 0) {
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1-$2');
-    }
-    input.value = value;
-}
-
-// Máscara para Nota Fiscal: apenas números
-function mascaraNumeros(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
-}
-
-// Máscara para Peso: permite apenas números e até 2 casas decimais
+// ── PESO kg: apenas pontos de milhar, sem decimais ───
+// Ex: 1000 → 1.000 | 100000 → 100.000
 function mascaraPeso(input) {
-    let value = input.value.replace(/[^0-9.]/g, '');
-    
-    // Evita múltiplos pontos
-    if ((value.match(/\./g) || []).length > 1) {
-        value = value.replace(/\.(?=.*\.)/, '');
-    }
-    
-    // Limita casas decimais
-    const parts = value.split('.');
-    if (parts.length === 2) {
-        parts[1] = parts[1].slice(0, 2);
-        value = parts.join('.');
-    }
-    
-    input.value = value;
+    let digits = input.value.replace(/\D/g, "");
+    if (digits.length > 10) digits = digits.slice(-10);
+    digits = digits.replace(/^0+/, "") || "0";
+    input.value = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Máscara para Moeda: R$ com 2 casas decimais
-function mascaraMoeda(input) {
-    let value = input.value.replace(/[^0-9.]/g, '');
-    
-    // Evita múltiplos pontos
-    if ((value.match(/\./g) || []).length > 1) {
-        value = value.replace(/\.(?=.*\.)/, '');
-    }
-    
-    // Limita casas decimais a 2
-    const parts = value.split('.');
-    if (parts.length === 2) {
-        parts[1] = parts[1].slice(0, 2);
-        value = parts.join('.');
-    }
-    
-    input.value = value;
+// Helper global: lê valor numérico de qualquer campo mascarado
+function getNumerico(id) {
+    const el = document.getElementById(id);
+    if (!el) return 0;
+    if (el.dataset.raw !== undefined) return parseFloat(el.dataset.raw) || 0;
+    return parseFloat(el.value) || 0;
 }
 
-// Máscara para Percentual: apenas números até 100
+// ── CNPJ: XX.XXX.XXX/XXXX-XX ────────────────────────
+function mascaraCNPJ(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 14);
+    if (v.length > 0)  v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+    if (v.length > 6)  v = v.replace(/^(\d{2}\.\d{3})(\d)/, '$1.$2');
+    if (v.length > 10) v = v.replace(/^(\d{2}\.\d{3}\.\d{3})(\d)/, '$1/$2');
+    if (v.length > 15) v = v.replace(/^(\d{2}\.\d{3}\.\d{3}\/\d{4})(\d)/, '$1-$2');
+    input.value = v;
+}
+
+// ── CPF/CNPJ automático ──────────────────────────────
+function mascaraCpfCnpj(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 14);
+    if (v.length <= 11) {
+        if (v.length > 3)  v = v.replace(/^(\d{3})(\d)/, '$1.$2');
+        if (v.length > 7)  v = v.replace(/^(\d{3}\.\d{3})(\d)/, '$1.$2');
+        if (v.length > 10) v = v.replace(/^(\d{3}\.\d{3}\.\d{3})(\d)/, '$1-$2');
+    } else {
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+        v = v.replace(/^(\d{2}\.\d{3})(\d)/, '$1.$2');
+        v = v.replace(/^(\d{2}\.\d{3}\.\d{3})(\d)/, '$1/$2');
+        v = v.replace(/^(\d{2}\.\d{3}\.\d{3}\/\d{4})(\d)/, '$1-$2');
+    }
+    input.value = v;
+}
+
+// ── CPF: XXX.XXX.XXX-XX ─────────────────────────────
+function mascaraCPF(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 3)  v = v.replace(/^(\d{3})(\d)/, '$1.$2');
+    if (v.length > 7)  v = v.replace(/^(\d{3}\.\d{3})(\d)/, '$1.$2');
+    if (v.length > 10) v = v.replace(/^(\d{3}\.\d{3}\.\d{3})(\d)/, '$1-$2');
+    input.value = v;
+}
+
+// ── APENAS NÚMEROS ───────────────────────────────────
+function mascaraNumeros(input) {
+    input.value = input.value.replace(/\D/g, '');
+}
+
+// ── PERCENTUAL ───────────────────────────────────────
 function mascaraPercentual(input) {
-    let value = input.value.replace(/[^0-9.]/g, '');
-    
-    // Evita múltiplos pontos
-    if ((value.match(/\./g) || []).length > 1) {
-        value = value.replace(/\.(?=.*\.)/, '');
-    }
-    
-    // Limita casas decimais
-    const parts = value.split('.');
-    if (parts.length === 2) {
-        parts[1] = parts[1].slice(0, 2);
-        value = parts.join('.');
-    }
-    
-    // Limita a 100%
-    if (parseFloat(value) > 100) {
-        value = '100';
-    }
-    
-    input.value = value;
+    let v = input.value.replace(/[^0-9.]/g, '');
+    const partes = v.split('.');
+    if (partes.length > 2) v = partes[0] + '.' + partes.slice(1).join('');
+    if (partes.length === 2) v = partes[0] + '.' + partes[1].slice(0, 2);
+    if (parseFloat(v) > 100) v = '100';
+    input.value = v;
 }
 
-// Validar CNPJ
-function validarCNPJ(cnpj) {
-    cnpj = cnpj.replace(/[^0-9]/g, '');
-    if (cnpj.length !== 14) return false;
-    
-    // Implementar validação do dígito verificador
-    return true;
-}
+// ── VALIDAÇÕES ───────────────────────────────────────
+function validarCNPJ(cnpj) { return cnpj.replace(/\D/g, '').length === 14; }
+function validarCPF(cpf)   { return cpf.replace(/\D/g, '').length === 11; }
 
-// Validar CPF
-function validarCPF(cpf) {
-    cpf = cpf.replace(/[^0-9]/g, '');
-    if (cpf.length !== 11) return false;
-    
-    // Implementar validação do dígito verificador
-    return true;
-}
+// ── INICIALIZAÇÃO ────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
 
-// Inicializar máscaras ao carregar página
-document.addEventListener('DOMContentLoaded', function() {
-    // CNPJ
-    const cnpjInputs = document.querySelectorAll('input[data-mascara="cnpj"]');
-    cnpjInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraCNPJ(this); });
+    document.querySelectorAll('input[data-mascara="cnpj"]').forEach(el =>
+        el.addEventListener('input', function () { mascaraCNPJ(this); }));
+
+    document.querySelectorAll('input[data-mascara="cpf"]').forEach(el =>
+        el.addEventListener('input', function () { mascaraCPF(this); }));
+
+    document.querySelectorAll('input[data-mascara="cpfcnpj"]').forEach(el =>
+        el.addEventListener('input', function () { mascaraCpfCnpj(this); }));
+
+    document.querySelectorAll('input[data-mascara="numero"]').forEach(el =>
+        el.addEventListener('input', function () { mascaraNumeros(this); }));
+
+    // Peso (decimal dinâmico, sem milhar)
+    document.querySelectorAll('input[data-mascara="peso"]').forEach(el => {
+        el.value = '0.00';
+        el.addEventListener('input', function () {
+            mascaraPeso(this);
+            if (typeof calcularSinistro   === 'function') calcularSinistro();
+            else if (typeof calcularFinanceiro === 'function') calcularFinanceiro();
+        });
     });
-    
-    // CPF
-    const cpfInputs = document.querySelectorAll('input[data-mascara="cpf"]');
-    cpfInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraCPF(this); });
+
+    // Moeda (formato brasileiro: 1.234,56)
+    document.querySelectorAll('input[data-mascara="moeda"]').forEach(el => {
+        el.value = '0,00';
+        el.dataset.raw = '0';
+        el.addEventListener('input', function () {
+            mascaraMoedaBR(this);
+            if (typeof calcularFinanceiro === 'function') calcularFinanceiro();
+        });
     });
-    // CPF/CNPJ alternado
-    const cpfcnpjInputs = document.querySelectorAll('input[data-mascara="cpfcnpj"]');
-    cpfcnpjInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraCpfCnpj(this); });
-    });
-    
-    // Números (Nota Fiscal, CT-e, etc)
-    const numeroInputs = document.querySelectorAll('input[data-mascara="numero"]');
-    numeroInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraNumeros(this); });
-    });
-    
-    // Peso
-    const pesoInputs = document.querySelectorAll('input[data-mascara="peso"]');
-    pesoInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraPeso(this); });
-    });
-    
-    // Moeda
-    const moedaInputs = document.querySelectorAll('input[data-mascara="moeda"]');
-    moedaInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraMoeda(this); });
-    });
-    
-    // Percentual
-    const percentualInputs = document.querySelectorAll('input[data-mascara="percentual"]');
-    percentualInputs.forEach(input => {
-        input.addEventListener('input', function() { mascaraPercentual(this); });
-    });
+
+    document.querySelectorAll('input[data-mascara="percentual"]').forEach(el =>
+        el.addEventListener('input', function () { mascaraPercentual(this); }));
 });

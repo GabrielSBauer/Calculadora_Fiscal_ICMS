@@ -3,413 +3,593 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Notas de Débito</title>
+    <title>Nota de Débito — Calculadora de Indenizações</title>
     <link rel="stylesheet" href="./css/style.css">
+    <style>
+        /* ── Padding lateral do container ── */
+        .container { padding: 40px; }
+        @media (max-width: 768px) { .container { padding: 20px; } }
+
+        /* ── Página hero ── */
+        .page-hero {
+            background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 55%, var(--sky) 100%);
+            padding: 56px 40px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::after {
+            content: '';
+            position: absolute;
+            right: -60px; bottom: -60px;
+            width: 340px; height: 340px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            pointer-events: none;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            right: 80px; top: -40px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(143,175,114,0.12);
+            pointer-events: none;
+        }
+        .page-hero h1 {
+            color: var(--white);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        .page-hero h1 span { color: var(--sage); }
+        .page-hero p {
+            color: rgba(255,255,255,0.72);
+            font-size: 14px;
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.9);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* ── Separador de seção ── */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 36px 0 20px;
+        }
+        .section-label::before, .section-label::after {
+            content: ''; flex: 1; height: 1px;
+            background: var(--border-color);
+        }
+        .section-label span {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            white-space: nowrap;
+        }
+
+        /* ── Aviso peso negativo inline ── */
+        .aviso-inline {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #fdf8ec, #fffcf4);
+            border-left: 4px solid var(--wheat);
+            color: var(--harvest);
+            padding: 11px 16px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* ── Grid de pesos ── */
+        .grid-pesos {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 900px) { .grid-pesos { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 600px) { .grid-pesos { grid-template-columns: 1fr; } }
+
+        /* ── Resultado visual ── */
+        .resultado-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 600px) { .resultado-grid { grid-template-columns: 1fr; } }
+
+        .res-card {
+            background: var(--gray-50);
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px 22px;
+        }
+        .res-card label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 8px;
+        }
+        .res-card input[readonly] {
+            border: none;
+            background: transparent;
+            padding: 0;
+            font-size: 22px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--navy);
+            width: 100%;
+        }
+        .res-card input[readonly]:hover,
+        .res-card input[readonly]:focus { box-shadow: none; outline: none; }
+
+        .res-card.total {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+            border: 2px solid var(--wheat);
+            grid-column: 1 / -1;
+        }
+        .res-card.total label { color: var(--harvest); }
+        .res-card.total input[readonly] {
+            font-size: 30px;
+            color: var(--danger);
+        }
+
+        /* ── Detalhes cálculo melhorado ── */
+        .detalhe-bloco {
+            background: linear-gradient(135deg, #f0f4ff 0%, var(--white) 100%);
+            border: 1px solid rgba(1,33,105,0.1);
+            border-left: 4px solid var(--navy);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .detalhe-titulo {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(1,33,105,0.1);
+        }
+        .detalhe-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(1,33,105,0.06);
+            font-size: 14px;
+        }
+        .detalhe-linha:last-child { border-bottom: none; padding-bottom: 0; }
+        .detalhe-linha.indent { padding-left: 18px; }
+        .detalhe-linha .dl { color: var(--gray-600); }
+        .detalhe-linha .dv {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── FAQ refinado ── */
+        .faq-item { transition: var(--transition); }
+        .faq-item h3 { transition: var(--transition); }
+        .faq-item:hover h3 { color: var(--sky); }
+
+        /* ── Card sem hover no result ── */
+        .card-result:hover { transform: none; }
+    </style>
 </head>
 <body>
 
-<!-- NAVEGAÇÃO TOPO -->
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-brand">
-            <h1>📊 Calculadora de Notas de Débito</h1>
+            <h1>Nota de Débito <span>· Indenizações</span></h1>
         </div>
         <ul class="navbar-links">
-            <li><a href="#formulario">Calculadora</a></li>
+            <li><a href="#formulario" class="active">Calculadora</a></li>
             <li><a href="#resultado">Resultado</a></li>
-            <li><a href="./paginas/guia_rapido.html" target="_blank">📖 Guia</a></li>
-            <li><a href="#faq">❓ Dúvidas</a></li>
+            <li><a href="./paginas/guia_rapido.html" target="_blank">Guia</a></li>
+            <li><a href="#faq">Dúvidas</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="container">
-    
-    <!-- FORMULÁRIO -->
-    <section id="formulario" class="section">
-        
-        <!-- SEÇÃO 1: TRANSPORTADOR -->
-<div class="card card-primary">
-    <div class="card-header">
-        <span class="card-icon">🏢</span>
-        <h2>Filial da ADM</h2>
+<div class="container" style="padding:0;">
+
+    <!-- HERO -->
+    <div class="page-hero">
+        <div class="hero-badge">v2.1 · Agronegócio</div>
+        <h1>Cálculo de <span>Indenizações</span> por Sinistro</h1>
+        <p>Gross-up automático · ICMS, PIS e COFINS recuperáveis · Tratamento especial MT</p>
     </div>
-    <div class="card-body">
-        <div class="form-row">
+
+    <div style="padding: 40px;">
+
+    <!-- ═══════════════════════════════════════════════
+         SEÇÃO 1 – TRANSPORTADOR
+    ════════════════════════════════════════════════ -->
+    <section id="formulario">
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <span class="card-icon">🚚</span>
+            <h2>Transportador</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="filial">Filial ADM</label>
+                    <input type="text" id="filial" placeholder="Ex: 1202" data-mascara="numero">
+                </div>
+                <div class="form-group">
+                    <label for="razao-social">Razão Social</label>
+                    <input type="text" id="razao-social" placeholder="Nome da empresa transportadora">
+                </div>
+                <div class="form-group">
+                    <label for="cnpj">CNPJ</label>
+                    <input type="text" id="cnpj" placeholder="00.000.000/0000-00" data-mascara="cnpj">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         SEÇÃO 2 – PRODUTO E DOCUMENTOS
+    ════════════════════════════════════════════════ -->
+    <div class="card card-info">
+        <div class="card-header">
+            <span class="card-icon">📦</span>
+            <h2>Produto e Documentos</h2>
+        </div>
+        <div class="card-body">
+
             <div class="form-group">
-                <label for="filial">Filial ADM:</label>
-                <input type="number" id="filial" placeholder="Ex: 1202">
+                <label for="produto">Produto</label>
+                <select id="produto">
+                    <option value="">— Selecione o produto —</option>
+                    <option value="ALGODÃO">ALGODÃO</option>
+                    <option value="SOJA EM GRAOS">SOJA EM GRÃOS</option>
+                    <option value="MILHO EM GRAO">MILHO EM GRÃO</option>
+                    <option value="FARELO DE SOJA HIPRO 101004">FARELO DE SOJA HIPRO 101004</option>
+                    <option value="FARELO DE SOJA TPII46%PROT GRAN">FARELO DE SOJA TPII 46% PROT GRAN</option>
+                    <option value="GLICERINA">GLICERINA</option>
+                    <option value="TRIGO EM GRAOS PN">TRIGO EM GRÃOS PN</option>
+                    <option value="TRIGO RAÇÃO">TRIGO RAÇÃO</option>
+                    <option value="107001 OLEO SOJA DEGOMADO G">107001 ÓLEO SOJA DEGOMADO G</option>
+                    <option value="107046 - OLEO SOJA RF CORCOVADO">107046 ÓLEO SOJA RF CORCOVADO</option>
+                </select>
+            </div>
+
+            <div id="info-piscofins" class="info-box info-box-warning" style="display:none;">
+                <p>PIS e COFINS <strong>não se aplicam</strong> a este produto.</p>
+            </div>
+
+            <div class="section-label"><span>NF de Lote</span></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nf-lote">Número da NF</label>
+                    <input type="text" id="nf-lote" placeholder="Ex: 123456" data-mascara="numero">
+                </div>
+                <div class="form-group">
+                    <label for="data-nf-lote">Data</label>
+                    <input type="date" id="data-nf-lote">
+                </div>
+            </div>
+
+            <div class="section-label"><span>CT-e (Conhecimento de Transporte)</span></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cte">Número do CT-e</label>
+                    <input type="text" id="cte" placeholder="Ex: 654321" data-mascara="numero">
+                </div>
+                <div class="form-group">
+                    <label for="data-cte">Data</label>
+                    <input type="date" id="data-cte">
+                </div>
+            </div>
+
+            <div class="section-label"><span>NF de Venda</span></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nf-venda">Número da NF</label>
+                    <input type="text" id="nf-venda" placeholder="Ex: 987654" data-mascara="numero">
+                </div>
+                <div class="form-group">
+                    <label for="data-nf-venda">Data</label>
+                    <input type="date" id="data-nf-venda">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         SEÇÃO 3 – PESOS E VALORES
+    ════════════════════════════════════════════════ -->
+    <div class="card card-warning">
+        <div class="card-header">
+            <span class="card-icon">⚖️</span>
+            <h2>Pesos e Valores</h2>
+        </div>
+        <div class="card-body">
+
+            <div class="info-box" style="margin-bottom:24px;">
+                <p><strong>Campos críticos:</strong> estes valores determinam diretamente o valor da indenização.</p>
+            </div>
+
+            <div class="section-label"><span>Pesos</span></div>
+            <div class="grid-pesos">
+                <div class="form-group" style="margin:0;">
+                    <label for="peso-saida">Peso Saída (kg)</label>
+                    <input type="text" id="peso-saida" placeholder="0" data-mascara="peso" inputmode="numeric">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label for="peso-destino">Peso Destino (kg)</label>
+                    <input type="text" id="peso-destino" placeholder="0" data-mascara="peso" inputmode="numeric">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label for="peso-sinistrado">Peso Sinistrado (kg)</label>
+                    <input type="text" id="peso-sinistrado" readonly placeholder="—">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label for="percentual-perda">% de Perda</label>
+                    <input type="text" id="percentual-perda" readonly placeholder="—">
+                </div>
+            </div>
+
+            <div id="aviso-peso-negativo" class="aviso-inline" style="display:none; margin-bottom:20px;">
+                ⚠️ <span>Peso de destino maior que o peso de saída — sinistrado travado em <strong>0</strong>.</span>
+            </div>
+
+            <div class="section-label"><span>Valores</span></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="valor-nf-saida">Valor NF Saída (R$)</label>
+                    <input type="text" id="valor-nf-saida" placeholder="0,00" data-mascara="moeda" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label for="valor-frete">Valor do Frete (R$)</label>
+                    <input type="text" id="valor-frete" placeholder="0,00" data-mascara="moeda" inputmode="numeric">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         SEÇÃO 4 – FISCAL
+    ════════════════════════════════════════════════ -->
+    <div class="card card-success">
+        <div class="card-header">
+            <span class="card-icon">📋</span>
+            <h2>Informações Fiscais</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="uf-origem">UF Origem</label>
+                    <select id="uf-origem">
+                        <option value="">— Selecione —</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AM">AM</option><option value="AP">AP</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option><option value="IM">IM (Importação)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="uf-destino">UF Destino</label>
+                    <select id="uf-destino">
+                        <option value="">— Selecione —</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AM">AM</option><option value="AP">AP</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option><option value="IM">IM (Importação)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="aliquota-icms">Alíquota ICMS (%)</label>
+                    <input type="text" id="aliquota-icms" placeholder="Automático" readonly>
+                </div>
+            </div>
+
+            <div id="aviso-mt" class="info-box info-box-warning" style="display:none;">
+                <p>Origem <strong>MT</strong> — cálculo aplicado <strong>sem Gross-Up</strong> (impostos diretos sobre a base proporcional).</p>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card card-primary">
-    <div class="card-header">
-        <span class="card-icon">🚚</span>
-        <h2>Informações do Transportador</h2>
-    </div>
-    <div class="card-body">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="razao-social">Razão Social:</label>
-                <input type="text" id="razao-social" placeholder="Nome da empresa">
-            </div>
-            <div class="form-group">
-                <label for="cnpj">CNPJ:</label>
-                <input type="text" id="cnpj" placeholder="00.000.000/0000-00" data-mascara="cnpj">
+    <!-- ═══════════════════════════════════════════════
+         SEÇÃO 5 – FORNECEDOR
+    ════════════════════════════════════════════════ -->
+    <div class="card card-secondary">
+        <div class="card-header">
+            <span class="card-icon">👤</span>
+            <h2>Fornecedor / Remetente</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fornecedor-nome">Nome / Razão Social</label>
+                    <input type="text" id="fornecedor-nome" placeholder="Nome do remetente">
+                </div>
+                <div class="form-group">
+                    <label for="fornecedor-doc">CPF / CNPJ</label>
+                    <input type="text" id="fornecedor-doc" placeholder="000.000.000-00 ou 00.000.000/0000-00" data-mascara="cpfcnpj">
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-        <!-- SEÇÃO 2: PRODUTO E DOCUMENTOS -->
-        <div class="card card-info">
-            <div class="card-header">
-                <span class="card-icon">📦</span>
-                <h2>Produto e Documentos</h2>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="produto">Produto:</label>
-                        <select id="produto">
-                            <option value="">-- Selecione o Produto --</option>
-                            <option value="ALGODÃO">ALGODÃO</option>
-                            <option value="SOJA EM GRAOS">SOJA EM GRÃOS</option>
-                            <option value="MILHO EM GRAO">MILHO EM GRÃO</option>
-                            <option value="FARELO DE SOJA HIPRO 101004">FARELO DE SOJA HIPRO 101004</option>
-                            <option value="FARELO DE SOJA TPII46%PROT GRAN">FARELO DE SOJA TPII46%PROT GRAN</option>
-                            <option value="GLICERINA">GLICERINA</option>
-                            <option value="TRIGO EM GRAOS PN">TRIGO EM GRÃOS PN</option>
-                            <option value="TRIGO RAÇÃO">TRIGO RAÇÃO</option>
-                            <option value="107001 OLEO SOJA DEGOMADO G">107001 ÓLEO SOJA DEGOMADO G</option>
-                            <option value="107046 - OLEO SOJA RF CORCOVADO">107046 - ÓLEO SOJA RF CORCOVADO</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="aviso-obrigatorio" class="info-box-warning" style="display:none;">
-                    <p>⚠️ Preencha <strong>Filial</strong> e <strong>Produto</strong> para continuar.</p>
-                </div>
-                <div id="info-piscofins" class="info-box-warning" style="display:none;">
-                    <p>ℹ️ PIS e COFINS não se aplicam a este produto.</p>
-                </div>
-
-                <div class="divider-row">
-                    <h3>NF Lote</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nf-lote">Nº NF:</label>
-                        <input type="text" id="nf-lote" placeholder="Ex: 123456" data-mascara="numero">
-                    </div>
-                    <div class="form-group">
-                        <label for="data-nf-lote">Data:</label>
-                        <input type="date" id="data-nf-lote">
-                    </div>
-                </div>
-
-                <div class="divider-row">
-                    <h3>CT-e (Conhecimento)</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cte">Nº do CT-e:</label>
-                        <input type="text" id="cte" placeholder="Ex: 654321" data-mascara="numero">
-                    </div>
-                    <div class="form-group">
-                        <label for="data-cte">Data:</label>
-                        <input type="date" id="data-cte">
-                    </div>
-                </div>
-
-                <div class="divider-row">
-                    <h3>NF Venda</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nf-venda">Nº NF:</label>
-                        <input type="text" id="nf-venda" placeholder="Ex: 987654" data-mascara="numero">
-                    </div>
-                    <div class="form-group">
-                        <label for="data-nf-venda">Data:</label>
-                        <input type="date" id="data-nf-venda">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 3: PESOS E VALORES -->
-        <div class="card card-warning">
-            <div class="card-header">
-                <span class="card-icon">⚖️</span>
-                <h2>Pesos e Valores</h2>
-            </div>
-            <div class="card-body">
-                <div class="info-box">
-                    <p>ℹ️ <strong>Campos Críticos:</strong> Estes valores são fundamentais para o cálculo correto.</p>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="peso-saida">Peso Saída (kg):</label>
-                        <input type="text" id="peso-saida" placeholder="0.00" data-mascara="peso" inputmode="decimal">
-                    </div>
-                    <div class="form-group">
-                        <label for="peso-destino">Peso Destino (kg):</label>
-                        <input type="text" id="peso-destino" placeholder="0.00" data-mascara="peso" inputmode="decimal">
-                    </div>
-                    <div class="form-group">
-                        <label for="peso-sinistrado">Peso Sinistrado (kg):</label>
-                        <input type="text" id="peso-sinistrado" readonly placeholder="Calculado">
-                    </div>
-                    <div class="form-group">
-                        <label for="percentual-perda">% Perda:</label>
-                        <input type="text" id="percentual-perda" readonly placeholder="0%">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="valor-nf-saida">Valor NF Saída (R$):</label>
-                        <!-- ✅ CORRIGIDO: removido "ecimal" colado no oninput e atributo duplicado -->
-                        <input type="text" id="valor-nf-saida" placeholder="0.00" data-mascara="moeda" inputmode="decimal">
-                    </div>
-                    <div class="form-group">
-                        <label for="valor-frete">Valor do Frete (R$):</label>
-                        <input type="text" id="valor-frete" placeholder="0.00" data-mascara="moeda" inputmode="decimal">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 4: INFORMAÇÕES FISCAIS -->
-        <div class="card card-success">
-            <div class="card-header">
-                <span class="card-icon">🏛️</span>
-                <h2>Informações Fiscais</h2>
-            </div>
-            <div class="card-body">
-                <div class="info-box">
-                    <p>ℹ️ <strong>Alíquota Automática:</strong> Preencha UF origem e destino para carregar automaticamente.</p>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="uf-origem">UF Origem:</label>
-                        <select id="uf-origem">
-                            <option value="">-- Origem --</option>
-                            <option value="AC">AC</option>
-                            <option value="AL">AL</option>
-                            <option value="AM">AM</option>
-                            <option value="AP">AP</option>
-                            <option value="BA">BA</option>
-                            <option value="CE">CE</option>
-                            <option value="DF">DF</option>
-                            <option value="ES">ES</option>
-                            <option value="GO">GO</option>
-                            <option value="MA">MA</option>
-                            <option value="MT">MT</option>
-                            <option value="MS">MS</option>
-                            <option value="MG">MG</option>
-                            <option value="PA">PA</option>
-                            <option value="PB">PB</option>
-                            <option value="PR">PR</option>
-                            <option value="PE">PE</option>
-                            <option value="PI">PI</option>
-                            <option value="RJ">RJ</option>
-                            <option value="RN">RN</option>
-                            <option value="RS">RS</option>
-                            <option value="RO">RO</option>
-                            <option value="RR">RR</option>
-                            <option value="SC">SC</option>
-                            <option value="SP">SP</option>
-                            <option value="SE">SE</option>
-                            <option value="TO">TO</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="uf-destino">UF Destino:</label>
-                        <select id="uf-destino">
-                            <option value="">-- Destino --</option>
-                            <option value="AC">AC</option>
-                            <option value="AL">AL</option>
-                            <option value="AM">AM</option>
-                            <option value="AP">AP</option>
-                            <option value="BA">BA</option>
-                            <option value="CE">CE</option>
-                            <option value="DF">DF</option>
-                            <option value="ES">ES</option>
-                            <option value="GO">GO</option>
-                            <option value="MA">MA</option>
-                            <option value="MT">MT</option>
-                            <option value="MS">MS</option>
-                            <option value="MG">MG</option>
-                            <option value="PA">PA</option>
-                            <option value="PB">PB</option>
-                            <option value="PR">PR</option>
-                            <option value="PE">PE</option>
-                            <option value="PI">PI</option>
-                            <option value="RJ">RJ</option>
-                            <option value="RN">RN</option>
-                            <option value="RS">RS</option>
-                            <option value="RO">RO</option>
-                            <option value="RR">RR</option>
-                            <option value="SC">SC</option>
-                            <option value="SP">SP</option>
-                            <option value="SE">SE</option>
-                            <option value="TO">TO</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="aliquota-icms">Alíquota ICMS (%):</label>
-                        <input type="number" id="aliquota-icms" placeholder="0.00" step="0.01" data-mascara="percentual" readonly>
-                    </div>
-                </div>
-
-                <div id="aviso-mt" class="info-box info-box-warning" style="display:none;">
-                    <p><strong>Atenção:</strong> Origem é MT - Cálculo sem GROSS-UP (direto)</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 5: REMETENTE/FORNECEDOR -->
-        <div class="card card-secondary">
-            <div class="card-header">
-                <span class="card-icon">👤</span>
-                <h2>Fornecedor/Remetente</h2>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="fornecedor-nome">Nome/Razão Social:</label>
-                        <input type="text" id="fornecedor-nome" placeholder="Nome do vendedor">
-                    </div>
-                    <div class="form-group">
-                        <label for="fornecedor-doc">CPF/CNPJ:</label>
-                        <input type="text" id="fornecedor-doc" placeholder="000.000.000-00 ou 00.000.000/0000-00" data-mascara="cpfcnpj">
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </section>
 
-    <!-- RESULTADO -->
-    <section id="resultado" class="section">
-        <div class="card card-result">
-            <div class="card-header">
-                <span class="card-icon">📊</span>
-                <h2>Cálculo da Indenização</h2>
-            </div>
-            <div class="card-body">
-                
-                <div class="detalhes-calculos">
-                    <div class="linha-calculo">
-                        <span class="label-calculo">Base Mercadoria (Perda Proporcional):</span>
-                        <span class="valor-calculo" id="detalhe-base-merc">R$ 0,00</span>
-                    </div>
-                    <div class="linha-calculo">
-                        <span class="label-calculo">Base Frete (Perda Proporcional):</span>
-                        <span class="valor-calculo" id="detalhe-base-frete">R$ 0,00</span>
-                    </div>
-                </div>
-
-                <div class="detalhes-calculos">
-                    <div class="subtitulo-impostos">Impostos Recuperáveis:</div>
-                    <div class="linha-calculo indent">
-                        <span class="label-calculo">ICMS (Mercadoria):</span>
-                        <span class="valor-calculo" id="detalhe-icms-merc">R$ 0,00</span>
-                    </div>
-                    <div class="linha-calculo indent">
-                        <span class="label-calculo">ICMS (Frete):</span>
-                        <span class="valor-calculo" id="detalhe-icms-frete">R$ 0,00</span>
-                    </div>
-                    <div class="linha-calculo indent">
-                        <span class="label-calculo">PIS:</span>
-                        <span class="valor-calculo" id="detalhe-pis">R$ 0,00</span>
-                    </div>
-                    <div class="linha-calculo indent">
-                        <span class="label-calculo">COFINS:</span>
-                        <span class="valor-calculo" id="detalhe-cofins">R$ 0,00</span>
-                    </div>
-                </div>
-
-                <div class="resumo-final">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Mercadoria (R$):</label>
-                            <input type="text" id="res-mercadoria" readonly placeholder="0,00">
-                        </div>
-                        <div class="form-group">
-                            <label>Impostos (R$):</label>
-                            <input type="text" id="res-impostos" readonly placeholder="0,00">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group total-group">
-                            <label>💰 Total à Pagar (R$):</label>
-                            <input type="text" id="res-total" readonly placeholder="0,00">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="botoes-acao">
-                    <button class="btn btn-primary" onclick="gerarVisual()">👁️ Visualizar Nota</button>
-                    <button class="btn btn-secondary" onclick="imprimirResultado()">🖨️ Imprimir</button>
-                    <button class="btn btn-tertiary" onclick="gerarPDF()">📄 Gerar PDF</button>
-                </div>
-
-            </div>
+    <!-- ═══════════════════════════════════════════════
+         RESULTADO
+    ════════════════════════════════════════════════ -->
+    <section id="resultado">
+    <div class="card card-result">
+        <div class="card-header">
+            <span class="card-icon">📊</span>
+            <h2>Cálculo da Indenização</h2>
         </div>
+        <div class="card-body">
+
+            <!-- Detalhes bases -->
+            <div class="detalhe-bloco">
+                <div class="detalhe-titulo">Bases Proporcionais</div>
+                <div class="detalhe-linha">
+                    <span class="dl">Base Mercadoria (perda proporcional)</span>
+                    <span class="dv" id="detalhe-base-merc">R$ 0,00</span>
+                </div>
+                <div class="detalhe-linha">
+                    <span class="dl">Base Frete (perda proporcional)</span>
+                    <span class="dv" id="detalhe-base-frete">R$ 0,00</span>
+                </div>
+            </div>
+
+            <!-- Impostos -->
+            <div class="detalhe-bloco">
+                <div class="detalhe-titulo">Impostos Recuperáveis</div>
+                <div class="detalhe-linha indent">
+                    <span class="dl">ICMS — Mercadoria</span>
+                    <span class="dv" id="detalhe-icms-merc">R$ 0,00</span>
+                </div>
+                <div class="detalhe-linha indent">
+                    <span class="dl">ICMS — Frete</span>
+                    <span class="dv" id="detalhe-icms-frete">R$ 0,00</span>
+                </div>
+                <div class="detalhe-linha indent">
+                    <span class="dl">PIS</span>
+                    <span class="dv" id="detalhe-pis">R$ 0,00</span>
+                </div>
+                <div class="detalhe-linha indent">
+                    <span class="dl">COFINS</span>
+                    <span class="dv" id="detalhe-cofins">R$ 0,00</span>
+                </div>
+            </div>
+
+            <!-- Resumo final -->
+            <div class="resultado-grid">
+                <div class="res-card">
+                    <label>Ressarcimento Mercadoria</label>
+                    <input type="text" id="res-mercadoria" readonly placeholder="R$ 0,00">
+                </div>
+                <div class="res-card">
+                    <label>Ressarcimento Impostos</label>
+                    <input type="text" id="res-impostos" readonly placeholder="R$ 0,00">
+                </div>
+                <div class="res-card total">
+                    <label>💰 Total à Pagar</label>
+                    <input type="text" id="res-total" readonly placeholder="R$ 0,00">
+                </div>
+            </div>
+
+            <div class="botoes-acao">
+                <button class="btn btn-primary" onclick="gerarVisual()">👁 Visualizar Nota</button>
+                <button class="btn btn-secondary" onclick="imprimirResultado()">🖨 Imprimir</button>
+                <button class="btn btn-tertiary" onclick="gerarPDF()">📄 Gerar PDF</button>
+            </div>
+
+        </div>
+    </div>
     </section>
 
-    <!-- VISUALIZAÇÃO/INVOICE -->
-    <section id="secao-visual" class="section" style="display:none;">
-        <div id="visual-nota" class="invoice">
-            <!-- Conteúdo gerado dinamicamente -->
-        </div>
+    <!-- INVOICE -->
+    <section id="secao-visual" style="display:none;">
+        <div id="visual-nota" class="invoice"></div>
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="section">
-        <div class="card">
-            <div class="card-header">
-                <span class="card-icon">❓</span>
-                <h2>Perguntas Frequentes</h2>
+    <!-- ═══════════════════════════════════════════════
+         FAQ
+    ════════════════════════════════════════════════ -->
+    <section id="faq">
+    <div class="card">
+        <div class="card-header">
+            <span class="card-icon">❓</span>
+            <h2>Perguntas Frequentes</h2>
+        </div>
+        <div class="card-body">
+            <div class="faq-item">
+                <h3>Como funciona o cálculo?</h3>
+                <p>O sistema calcula a proporção da perda em peso, aplica sobre os valores de NF e frete e recupera os impostos embutidos (ICMS, PIS, COFINS) via Gross-Up. Se a UF de origem for MT, o cálculo é feito de forma direta, sem Gross-Up.</p>
             </div>
-            <div class="card-body">
-                <div class="faq-item">
-                    <h3>Como funciona o cálculo?</h3>
-                    <p>O sistema calcula a proporção de perda (peso), aplica sobre os valores e recupera impostos. 
-                       Se UF origem for MT, o cálculo é direto (sem gross-up).</p>
-                </div>
-                <div class="faq-item">
-                    <h3>O que é Gross-Up?</h3>
-                    <p>O termo “Gross Up”, traduzido significa “embutir os impostos” nada mais é doque "calculo por dentro". Em MT, não se aplica.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Posso gerar PDF?</h3>
-                    <p>Sim! Use o botão "Gerar PDF" após calcular. Você também pode imprimir diretamente.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Os campos precisam estar todos preenchidos?</h3>
-                    <p>Não. Apenas peso saída, peso destino, valor NF e ICMS são obrigatórios para calcular.</p>
-                </div>
+            <div class="faq-item">
+                <h3>O que é Gross-Up?</h3>
+                <p>"Gross-Up" significa embutir os impostos no valor base — ou seja, calcular "por dentro". O sistema recupera o ICMS, PIS e COFINS que foram pagos na NF original, proporcionalmente à perda. Em MT, essa técnica não se aplica.</p>
+            </div>
+            <div class="faq-item">
+                <h3>PIS e COFINS se aplicam a todos os produtos?</h3>
+                <p>Não. Apenas Milho, Algodão e Sorgo têm PIS (1,65%) e COFINS (7,60%) aplicados. Os demais produtos recebem apenas o ICMS.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Posso gerar um PDF da nota?</h3>
+                <p>Sim. Após o cálculo, clique em "Visualizar Nota" para prévia, depois em "Gerar PDF" para salvar, ou "Imprimir" para impressão direta.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Quais campos são obrigatórios?</h3>
+                <p>Para o cálculo funcionar: Peso de Saída, Peso de Destino, Valor NF e UF de Origem + Destino (para a alíquota de ICMS). Os demais campos compõem a nota de débito.</p>
             </div>
         </div>
+    </div>
     </section>
 
-</div>
+    </div><!-- /padding wrapper -->
+</div><!-- /container -->
 
-<!-- RODAPÉ COM LINKS -->
 <footer class="footer">
     <div class="footer-content">
-        <p>&copy; 2026 Calculadora de Notas de Débito v2.1</p>
+        <p>Calculadora de Notas de Débito &mdash; Sinistros em Transporte</p>
+        <p style="font-size:11px; margin-top:4px; opacity:0.5;">v2.1 · 2026</p>
         <ul>
-            <li><a href="./paginas/guia_rapido.html" target="_blank">📖 Guia de Uso</a></li>
-            <li><a href="./README.md" target="_blank">📚 Documentação</a></li>
-            <li><a href="./paginas/teste_calculos.html" target="_blank">🧪 Testes</a></li>
+            <li><a href="./paginas/guia_rapido.html" target="_blank">Guia de Uso</a></li>
+            <li><a href="./README.md" target="_blank">Documentação</a></li>
+            <li><a href="./paginas/teste_calculos.html" target="_blank">Testes</a></li>
         </ul>
     </div>
 </footer>
@@ -419,5 +599,4 @@
 <script src="./js/script.js"></script>
 <script src="./js/visual.js"></script>
 </body>
-
 </html>
