@@ -1,270 +1,170 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia Rápido — Nota de Débito</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .container { padding: 0; }
-        .page-hero {
-            background: linear-gradient(160deg, var(--earth-green) 0%, var(--leaf-green) 60%, var(--sage) 100%);
-            padding: 56px 48px 48px;
-            position: relative; overflow: hidden;
-        }
-        .page-hero::after {
-            content: ''; position: absolute;
-            right: -40px; bottom: -60px;
-            width: 300px; height: 300px; border-radius: 50%;
-            background: rgba(255,255,255,0.05); pointer-events: none;
-        }
-        .page-hero h1 { color: var(--white); font-size: 26px; margin-bottom: 8px; }
-        .page-hero h1 span { color: var(--wheat-light); }
-        .page-hero p { color: rgba(255,255,255,0.75); font-size: 14px; margin: 0; }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-            color: rgba(255,255,255,0.95); font-size: 10px; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            padding: 4px 12px; border-radius: 2px; margin-bottom: 20px;
-        }
-        .content-wrap { padding: 40px 48px; }
-        @media (max-width: 768px) {
-            .page-hero { padding: 36px 24px 32px; }
-            .content-wrap { padding: 24px; }
-        }
-
-        /* Passo a passo */
-        .passos { display: grid; gap: 16px; margin-bottom: 32px; }
-        .passo {
-            display: grid; grid-template-columns: 48px 1fr;
-            gap: 20px; align-items: start;
-            background: var(--white); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 20px 24px;
-            box-shadow: var(--shadow-sm); transition: var(--transition);
-        }
-        .passo:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
-        .passo-num {
-            width: 40px; height: 40px;
-            background: var(--navy); color: var(--white);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display); font-size: 16px; font-weight: 700;
-            flex-shrink: 0;
-        }
-        .passo h3 { font-size: 15px; color: var(--navy); margin-bottom: 6px; }
-        .passo p { font-size: 13px; color: var(--gray-600); margin: 0; line-height: 1.6; }
-
-        /* Fórmula */
-        .formula-box {
-            background: linear-gradient(135deg, #f0f4ff, var(--white));
-            border: 1px solid rgba(1,33,105,0.12);
-            border-left: 4px solid var(--navy);
-            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-            padding: 20px 24px; margin: 16px 0;
-            font-family: var(--font-display); font-size: 14px; color: var(--navy);
-        }
-        .formula-box .label {
-            font-family: var(--font-body); font-size: 10px; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--gray-400); margin-bottom: 8px;
-        }
-
-        /* Exemplo prático */
-        .exemplo-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-            margin: 20px 0;
-        }
-        @media (max-width: 600px) { .exemplo-grid { grid-template-columns: 1fr; } }
-        .exemplo-col {
-            background: var(--gray-50); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 20px;
-        }
-        .exemplo-col h4 {
-            font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-            text-transform: uppercase; color: var(--gray-400); margin-bottom: 14px;
-        }
-        .exemplo-linha {
-            display: flex; justify-content: space-between;
-            padding: 7px 0; border-bottom: 1px solid var(--border-light);
-            font-size: 13px;
-        }
-        .exemplo-linha:last-child { border-bottom: none; }
-        .exemplo-linha .el { color: var(--gray-600); }
-        .exemplo-linha .ev { font-weight: 600; color: var(--gray-800); }
-
-        .total-destaque {
-            background: linear-gradient(135deg, var(--gold-light), #fff3cd);
-            border: 2px solid var(--wheat);
-            border-radius: var(--radius-lg);
-            padding: 20px 28px; text-align: center; margin: 24px 0;
-        }
-        .total-destaque .tl { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--harvest); margin-bottom: 4px; }
-        .total-destaque .tv { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--danger); letter-spacing: -0.03em; }
-
-        .section-title {
-            font-family: var(--font-display); font-size: 20px; color: var(--navy);
-            margin: 36px 0 20px; padding-bottom: 12px;
-            border-bottom: 2px solid var(--navy);
-        }
-        .back-link {
-            display: inline-flex; align-items: center; gap: 8px;
-            color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600;
-            letter-spacing: 0.06em; text-decoration: none;
-            margin-bottom: 24px; transition: var(--transition);
-        }
-        .back-link:hover { color: var(--white); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Rápido — Nota de Débito · ADM</title>
+  <link rel="icon" type="image/png" href="../img/adm-logo.png">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/guia.css">
 </head>
 <body>
 
+<!-- ═══════════════ NAVBAR ═══════════════ -->
 <nav class="navbar">
-    <div class="navbar-container">
-        <div class="navbar-brand">
-            <h1>Nota de Débito <span>· Guia Rápido</span></h1>
-        </div>
-        <ul class="navbar-links">
-            <li><a href="../index.html">← Voltar à Calculadora</a></li>
-        </ul>
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <div class="navbar-logo-wrap">
+        <img src="../img/adm-logo.png" alt="ADM">
+      </div>
+      <div class="navbar-divider"></div>
+      <h1 class="navbar-title">Nota de Débito <span>· Guia Rápido</span></h1>
     </div>
+    <ul class="navbar-links">
+      <li><a href="../index.html">← Voltar à Calculadora</a></li>
+    </ul>
+  </div>
 </nav>
 
-<div class="container">
+<!-- ═══════════════ CONTAINER ═══════════════ -->
+<div class="guia-container">
 
-    <div class="page-hero">
-        <div class="hero-badge">Guia de Uso</div>
-        <h1>Como usar a <span>Calculadora</span></h1>
-        <p>Entenda o cálculo de indenizações passo a passo, de forma clara e transparente.</p>
+  <!-- HERO -->
+  <div class="guia-hero">
+    <div class="guia-eyebrow">Guia de Uso</div>
+    <h1>Como usar a Calculadora</h1>
+    <p>Entenda o cálculo de indenizações passo a passo, de forma clara e transparente.</p>
+  </div>
+
+  <!-- CORPO -->
+  <div class="guia-body">
+
+    <h2 class="section-title">Passo a Passo</h2>
+    <div class="passos">
+      <div class="passo">
+        <div class="passo-num">1</div>
+        <div>
+          <h3>Preencha os dados do Transportador</h3>
+          <p>Informe a Filial ADM, Razão Social e CNPJ da empresa transportadora responsável pelo sinistro.</p>
+        </div>
+      </div>
+      <div class="passo">
+        <div class="passo-num">2</div>
+        <div>
+          <h3>Selecione o Produto e informe os Documentos</h3>
+          <p>O produto determina se PIS e COFINS se aplicam (Milho, Algodão e Sorgo). Informe NF Lote, CT-e e NF Venda com suas respectivas datas.</p>
+        </div>
+      </div>
+      <div class="passo">
+        <div class="passo-num">3</div>
+        <div>
+          <h3>Informe os Pesos e Valores <em class="passo-obs">(campos críticos)</em></h3>
+          <p>Digite o peso que saiu na origem e o que chegou no destino. O sistema calcula automaticamente o peso sinistrado e o % de perda. Informe o valor da NF e do frete.</p>
+        </div>
+      </div>
+      <div class="passo">
+        <div class="passo-num">4</div>
+        <div>
+          <h3>Selecione UF Origem e Destino</h3>
+          <p>A alíquota de ICMS é preenchida automaticamente. Se a origem for <strong>MT</strong>, o sistema aplica cálculo direto (sem Gross-Up).</p>
+        </div>
+      </div>
+      <div class="passo">
+        <div class="passo-num">5</div>
+        <div>
+          <h3>Veja o resultado detalhado</h3>
+          <p>O sistema exibe cada componente: base mercadoria, base frete, ICMS, PIS, COFINS e o total a pagar. Use os botões para visualizar, imprimir ou gerar PDF.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="content-wrap">
+    <h2 class="section-title">Como o Cálculo Funciona</h2>
 
-        <h2 class="section-title">Passo a Passo</h2>
-        <div class="passos">
-            <div class="passo">
-                <div class="passo-num">1</div>
-                <div>
-                    <h3>Preencha os dados do Transportador</h3>
-                    <p>Informe a Filial ADM, Razão Social e CNPJ da empresa transportadora responsável pelo sinistro.</p>
-                </div>
-            </div>
-            <div class="passo">
-                <div class="passo-num">2</div>
-                <div>
-                    <h3>Selecione o Produto e informe os Documentos</h3>
-                    <p>O produto determina se PIS e COFINS se aplicam (Milho, Algodão e Sorgo). Informe NF Lote, CT-e e NF Venda com suas respectivas datas.</p>
-                </div>
-            </div>
-            <div class="passo">
-                <div class="passo-num">3</div>
-                <div>
-                    <h3>Informe os Pesos e Valores <em>(campos críticos)</em></h3>
-                    <p>Digite o peso que saiu na origem e o que chegou no destino. O sistema calcula automaticamente o peso sinistrado e o % de perda. Informe o valor da NF e do frete.</p>
-                </div>
-            </div>
-            <div class="passo">
-                <div class="passo-num">4</div>
-                <div>
-                    <h3>Selecione UF Origem e Destino</h3>
-                    <p>A alíquota de ICMS é preenchida automaticamente. Se a origem for <strong>MT</strong>, o sistema aplica cálculo direto (sem Gross-Up).</p>
-                </div>
-            </div>
-            <div class="passo">
-                <div class="passo-num">5</div>
-                <div>
-                    <h3>Veja o resultado detalhado</h3>
-                    <p>O sistema exibe cada componente: base mercadoria, base frete, ICMS, PIS, COFINS e o total a pagar. Use os botões para visualizar, imprimir ou gerar PDF.</p>
-                </div>
-            </div>
-        </div>
-
-        <h2 class="section-title">Como o Cálculo Funciona</h2>
-
-        <div class="formula-box">
-            <div class="label">Passo 1 — Proporção de perda</div>
-            Peso Sinistrado = Peso Saída − Peso Destino<br>
-            % Perda = (Peso Sinistrado ÷ Peso Saída) × 100
-        </div>
-
-        <div class="formula-box">
-            <div class="label">Passo 2 — Bases proporcionais</div>
-            Base Mercadoria = Valor NF × % Perda<br>
-            Base Frete = Valor Frete × % Perda
-        </div>
-
-        <div class="formula-box">
-            <div class="label">Passo 3 — Gross-Up (recuperar impostos)</div>
-            Fator = (100 − ICMS − PIS − COFINS) ÷ 100<br>
-            Valor Gross-Up = Base Mercadoria ÷ Fator<br>
-            ICMS = Valor Gross-Up × ICMS%<br>
-            PIS = Valor Gross-Up × 1,65% &nbsp;·&nbsp; COFINS = Valor Gross-Up × 7,60%
-        </div>
-
-        <div class="formula-box" style="border-left-color: var(--leaf-green);">
-            <div class="label">Total a Pagar</div>
-            Total = Base Mercadoria + ICMS Merc. + ICMS Frete + PIS + COFINS
-        </div>
-
-        <h2 class="section-title">Exemplo Prático</h2>
-
-        <div class="exemplo-grid">
-            <div class="exemplo-col">
-                <h4>Dados de Entrada</h4>
-                <div class="exemplo-linha"><span class="el">Peso Saída</span><span class="ev">1.000 kg</span></div>
-                <div class="exemplo-linha"><span class="el">Peso Destino</span><span class="ev">800 kg</span></div>
-                <div class="exemplo-linha"><span class="el">Peso Sinistrado</span><span class="ev">200 kg (20%)</span></div>
-                <div class="exemplo-linha"><span class="el">Valor NF</span><span class="ev">R$ 50.000</span></div>
-                <div class="exemplo-linha"><span class="el">Valor Frete</span><span class="ev">R$ 2.000</span></div>
-                <div class="exemplo-linha"><span class="el">ICMS</span><span class="ev">18%</span></div>
-            </div>
-            <div class="exemplo-col">
-                <h4>Resultado</h4>
-                <div class="exemplo-linha"><span class="el">Base Mercadoria</span><span class="ev">R$ 10.000,00</span></div>
-                <div class="exemplo-linha"><span class="el">Base Frete</span><span class="ev">R$ 400,00</span></div>
-                <div class="exemplo-linha"><span class="el">ICMS Mercadoria</span><span class="ev">R$ 2.195,12</span></div>
-                <div class="exemplo-linha"><span class="el">ICMS Frete</span><span class="ev">R$ 87,80</span></div>
-                <div class="exemplo-linha"><span class="el">PIS</span><span class="ev">R$ 201,22</span></div>
-                <div class="exemplo-linha"><span class="el">COFINS</span><span class="ev">R$ 927,93</span></div>
-            </div>
-        </div>
-
-        <div class="total-destaque">
-            <div class="tl">Total à Pagar</div>
-            <div class="tv">R$ 13.412,07</div>
-        </div>
-
-        <h2 class="section-title">Dúvidas Frequentes</h2>
-
-        <div class="card" style="margin-bottom:0;">
-            <div class="card-body">
-                <div class="faq-item">
-                    <h3>Por que preciso de dois pesos?</h3>
-                    <p>Um é o peso ao sair da origem, outro ao chegar no destino. A diferença é a perda sinistrada.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>O que muda no cálculo para MT?</h3>
-                    <p>Em MT, os impostos são aplicados diretamente sobre a base proporcional, sem o ajuste de Gross-Up.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>A alíquota ICMS é sempre a mesma?</h3>
-                    <p>Não. Varia por par origem-destino. Por isso, selecione as UFs corretamente — o sistema preenche automaticamente.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>PIS e COFINS se aplicam a todos os produtos?</h3>
-                    <p>Não. Apenas Milho, Algodão e Sorgo. Os demais recebem somente ICMS.</p>
-                </div>
-            </div>
-        </div>
-
+    <div class="formula">
+      <span class="formula-label">Passo 1 — Proporção de perda</span>
+      Peso Sinistrado = Peso Saída − Peso Destino<br>
+      % Perda = (Peso Sinistrado ÷ Peso Saída) × 100
     </div>
-</div>
+    <div class="formula">
+      <span class="formula-label">Passo 2 — Bases proporcionais</span>
+      Base Mercadoria = Valor NF × % Perda<br>
+      Base Frete = Valor Frete × % Perda
+    </div>
+    <div class="formula">
+      <span class="formula-label">Passo 3 — Gross-Up (recuperar impostos)</span>
+      Fator = (100 − ICMS − PIS − COFINS) ÷ 100<br>
+      Valor Gross-Up = Base Mercadoria ÷ Fator<br>
+      ICMS = Valor Gross-Up × ICMS% &nbsp;·&nbsp; PIS = × 1,65% &nbsp;·&nbsp; COFINS = × 7,60%
+    </div>
+    <div class="formula formula-gold">
+      <span class="formula-label">Total a Pagar</span>
+      Total = Base Mercadoria + ICMS Merc. + ICMS Frete + PIS + COFINS
+    </div>
 
+    <h2 class="section-title">Exemplo Prático</h2>
+
+    <div class="exemplo-grid">
+      <div class="exemplo-col">
+        <h4>Dados de Entrada</h4>
+        <div class="ex-linha"><span class="el">Peso Saída</span><span class="ev">1.000 kg</span></div>
+        <div class="ex-linha"><span class="el">Peso Destino</span><span class="ev">800 kg</span></div>
+        <div class="ex-linha"><span class="el">Peso Sinistrado</span><span class="ev">200 kg (20%)</span></div>
+        <div class="ex-linha"><span class="el">Valor NF</span><span class="ev">R$ 50.000</span></div>
+        <div class="ex-linha"><span class="el">Valor Frete</span><span class="ev">R$ 2.000</span></div>
+        <div class="ex-linha"><span class="el">ICMS</span><span class="ev">18%</span></div>
+      </div>
+      <div class="exemplo-col">
+        <h4>Resultado</h4>
+        <div class="ex-linha"><span class="el">Base Mercadoria</span><span class="ev">R$ 10.000,00</span></div>
+        <div class="ex-linha"><span class="el">Base Frete</span><span class="ev">R$ 400,00</span></div>
+        <div class="ex-linha"><span class="el">ICMS Mercadoria</span><span class="ev">R$ 2.195,12</span></div>
+        <div class="ex-linha"><span class="el">ICMS Frete</span><span class="ev">R$ 87,80</span></div>
+        <div class="ex-linha"><span class="el">PIS</span><span class="ev">R$ 201,22</span></div>
+        <div class="ex-linha"><span class="el">COFINS</span><span class="ev">R$ 927,93</span></div>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <div class="tl">Total à Pagar</div>
+      <div class="tv">R$ 13.412,07</div>
+    </div>
+
+    <h2 class="section-title">Dúvidas Frequentes</h2>
+
+    <div class="faq-item">
+      <h3>Por que preciso de dois pesos?</h3>
+      <p>Um é o peso ao sair da origem, outro ao chegar no destino. A diferença é a perda sinistrada que será indenizada.</p>
+    </div>
+    <div class="faq-item">
+      <h3>O que muda no cálculo para MT?</h3>
+      <p>Em MT, os impostos são aplicados diretamente sobre a base proporcional, sem o ajuste de Gross-Up.</p>
+    </div>
+    <div class="faq-item">
+      <h3>A alíquota ICMS é sempre a mesma?</h3>
+      <p>Não. Varia por par origem-destino. Por isso, selecione as UFs corretamente — o sistema preenche automaticamente.</p>
+    </div>
+    <div class="faq-item">
+      <h3>PIS e COFINS se aplicam a todos os produtos?</h3>
+      <p>Não. Apenas Milho, Algodão e Sorgo. Os demais recebem somente ICMS.</p>
+    </div>
+
+  </div><!-- /guia-body -->
+</div><!-- /guia-container -->
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
 <footer class="footer">
-    <div class="footer-content">
-        <p>Calculadora de Notas de Débito · Guia Rápido</p>
-        <ul>
-            <li><a href="../index.html">← Voltar à Calculadora</a></li>
-        </ul>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <img src="../img/adm-logo.png" alt="ADM">
     </div>
+    <div class="footer-center">
+      <p>Calculadora de Notas de Débito &mdash; Sinistros em Transporte<br>
+      <span>ADM do Brasil &nbsp;·&nbsp; 2026</span></p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="../index.html">← Calculadora</a></li>
+    </ul>
+  </div>
 </footer>
 
 </body>
